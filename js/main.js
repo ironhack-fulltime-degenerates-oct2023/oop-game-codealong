@@ -2,10 +2,10 @@
 class Player {
     constructor() {
         // initialize properties
-        this.positionX = 50;
-        this.positionY = 0;
-        this.height = 10;
         this.width = 20;
+        this.height = 10;
+        this.positionX = 50 - (this.width / 2);
+        this.positionY = 0;
 
         // dom manipulation to reflect initial values (size, position)
         this.playerElm = document.getElementById("player");
@@ -27,10 +27,10 @@ class Player {
 
 class Obstacle {
     constructor(){
+        this.width = 30;
+        this.height = 10;
         this.positionX = 50;
         this.positionY = 100;
-        this.height = 10;
-        this.width = 30;
         this.obstacleElm = null;
 
         this.createDomElement();
@@ -68,16 +68,29 @@ const obstaclesArr = []; // will store instances of the class Obstacle
 setInterval(() => {
     const newObstacle = new Obstacle();
     obstaclesArr.push(newObstacle);
-}, 2000);
+}, 3000);
 
 
 
-// move all obstacles
+// update obstacles
 setInterval(() => {
     obstaclesArr.forEach( (obstacleInstance) => {
+        // move
         obstacleInstance.moveDown();
+
+        // detect collision
+        if (
+            player.positionX < obstacleInstance.positionX + obstacleInstance.width &&
+            player.positionX + player.width > obstacleInstance.positionX &&
+            player.positionY < obstacleInstance.positionY + obstacleInstance.height &&
+            player.positionY + player.height > obstacleInstance.positionY
+        ) {
+            // Collision detected!
+            // console.log("game over!");
+            location.href = "./gameover.html";
+        }
     });
-}, 50);
+}, 30);
 
 
 
